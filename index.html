@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <head>
+    <title>TaskFlow</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+         <div class="brand">
+        <span class="brand-icon">✓</span>
+        <h2>TaskFlow</h2>
+    </div>
+    </div>
+    </nav>
+
+    <!-- Main Section -->
+    <main>
+
+       <div class="welcome-section">
+    <h1>Student Task Manager</h1>
+    <p>Stay organized, manage your deadlines, and get things done.</p>
+</div>
+
+        <!-- Dashboard Statistics -->
+        <section class="dashboard">
+    <div class="stat-card total-card">
+        <h3>Total Tasks</h3>
+        <p id="totalTasks">0</p>
+    </div>
+
+    <div class="stat-card pending-card">
+        <h3>Pending</h3>
+        <p id="pendingTasks">0</p>
+    </div>
+
+    <div class="stat-card completed-card">
+        <h3>Completed</h3>
+        <p id="completedTasks">0</p>
+    </div>
+</section>
+
+        <!-- Add Task -->
+       <section>
+    <h2>Add New Task</h2>
+
+    <div class="form-group">
+        <label for="taskInput">Task Name</label>
+        <input type="text" id="taskInput" placeholder="Enter your task">
+    </div>
+
+    <div class="form-group">
+        <label for="deadlineInput">Deadline</label>
+        <input type="date" id="deadlineInput">
+    </div>
+
+    <button id="addTaskButton">Add Task</button>
+</section>
+
+        <!-- Task List -->
+        <section>
+
+            <h2>My Tasks</h2>
+            <p id="taskSummary" class="task-summary">
+    No tasks yet
+</p>
+<input 
+    type="text" 
+    id="searchInput" 
+    placeholder="🔎 Search tasks..."
+>
+<div class="filter-bar">
+    <button id="allFilter" class="active-filter" onclick="showAllTasks()">All</button>
+    <button id="pendingFilter" onclick="showPendingTasks()">Pending</button>
+    <button id="completedFilter" onclick="showCompletedTasks()">Completed</button>
+</div>
+    <div id="taskList">
+        
+    </div>
+
+        </section>
+
+    </main>
+<script src="script.js"></script>
+</body>
+</html>
