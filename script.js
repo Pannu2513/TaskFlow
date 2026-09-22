@@ -11,11 +11,6 @@ const pendingTasks = document.getElementById("pendingTasks");
 const completedTasks = document.getElementById("completedTasks");
 
 let tasks = [];
-const savedTasks = localStorage.getItem("tasks");
-
-if (savedTasks) {
-    tasks = JSON.parse(savedTasks);
-}
 
 displayTasks();
 updateStats();
@@ -42,13 +37,30 @@ if (deadline < today) {
         completed: false
     };
 
-    tasks.push(task);
-localStorage.setItem("tasks", JSON.stringify(tasks));
+   fetch("http://localhost:3000/api/tasks", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        name: taskName,
+        deadline: deadline
+    })
+})
+.then(function(response) {
+    return response.json();
+})
+.then(function(newTask) {
+    tasks.push(newTask);
     displayTasks();
     updateStats();
 
     taskInput.value = "";
     deadlineInput.value = "";
+})
+.catch(function(error) {
+    console.log("Error adding task:", error);
+});
 
 });
 
@@ -123,27 +135,61 @@ function updateStats() {
 }
 function completeTask(index) {
 
-    tasks[index].completed = true;
+    const taskId = tasks[index].id;
 
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    fetch("http://localhost:3000/api/tasks/" + taskId, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            completed: true
+        })
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(updatedTask) {
 
-    displayTasks();
-    updateStats();
+        tasks[index] = updatedTask;
+
+        displayTasks();
+        updateStats();
+
+    })
+    .catch(function(error) {
+        console.log("Error completing task:", error);
+    });
 
 }
 function deleteTask(index) {
+
     const confirmDelete = confirm("Are you sure you want to delete this task?");
 
     if (!confirmDelete) {
         return;
     }
 
-    tasks.splice(index, 1);
+    const taskId = tasks[index].id;
 
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+    fetch("http://localhost:3000/api/tasks/" + taskId, {
+        method: "DELETE"
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(deletedTask) {
 
-    displayTasks();
-    updateStats();
+        tasks.splice(index, 1);
+
+        displayTasks();
+        updateStats();
+
+    })
+    .catch(function(error) {
+        console.log("Error deleting task:", error);
+    });
+
 }
 function editTask(index) {
 
@@ -153,19 +199,40 @@ function editTask(index) {
         return;
     }
 
-    const newDeadline = prompt("Enter new deadline (YYYY-MM-DD):", tasks[index].deadline);
+    const newDeadline = prompt(
+        "Enter new deadline (YYYY-MM-DD):",
+        tasks[index].deadline
+    );
 
     if (newDeadline === null || newDeadline === "") {
         return;
     }
 
-    tasks[index].name = newName;
-    tasks[index].deadline = newDeadline;
+    fetch("http://localhost:3000/api/tasks/" + tasks[index].id, {
+        method: "PUT",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            name: newName,
+            deadline: newDeadline,
+            completed: tasks[index].completed
+        })
+    })
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(updatedTask) {
 
-    localStorage.setItem("tasks", JSON.stringify(tasks));
+        tasks[index] = updatedTask;
 
-    displayTasks();
-    updateStats();
+        displayTasks();
+        updateStats();
+
+    })
+    .catch(function(error) {
+        console.log("Error editing task:", error);
+    });
 
 }
 function showAllTasks() {
@@ -325,3 +392,15 @@ function updateActiveFilter() {
         filterButtons[2].classList.add("active-filter");
     }
 }
+fetch("http://localhost:3000/api/tasks")
+    .then(function(response) {
+        return response.json();
+    })
+    .then(function(data) {
+        tasks = data;
+        displayTasks();
+        updateStats();
+    })
+    .catch(function(error) {
+        console.log("Backend error:", error);
+    });
