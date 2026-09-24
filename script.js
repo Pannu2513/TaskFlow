@@ -9,6 +9,11 @@ const taskList = document.getElementById("taskList");
 const totalTasks = document.getElementById("totalTasks");
 const pendingTasks = document.getElementById("pendingTasks");
 const completedTasks = document.getElementById("completedTasks");
+const token = localStorage.getItem("token");
+
+if (!token) {
+    window.location.href = "login.html";
+}
 
 let tasks = [];
 
@@ -40,7 +45,8 @@ if (deadline < today) {
    fetch("http://localhost:3000/api/tasks", {
     method: "POST",
     headers: {
-        "Content-Type": "application/json"
+         "Content-Type": "application/json",
+    "Authorization": "Bearer " + token
     },
     body: JSON.stringify({
         name: taskName,
@@ -140,7 +146,8 @@ function completeTask(index) {
     fetch("http://localhost:3000/api/tasks/" + taskId, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+    "Authorization": "Bearer " + token
         },
         body: JSON.stringify({
             completed: true
@@ -173,7 +180,10 @@ function deleteTask(index) {
     const taskId = tasks[index].id;
 
     fetch("http://localhost:3000/api/tasks/" + taskId, {
-        method: "DELETE"
+        method: "DELETE",
+         headers: {
+        "Authorization": "Bearer " + token
+    }
     })
     .then(function(response) {
         return response.json();
@@ -211,7 +221,8 @@ function editTask(index) {
     fetch("http://localhost:3000/api/tasks/" + tasks[index].id, {
         method: "PUT",
         headers: {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+        "Authorization": "Bearer " + token
         },
         body: JSON.stringify({
             name: newName,
@@ -392,7 +403,11 @@ function updateActiveFilter() {
         filterButtons[2].classList.add("active-filter");
     }
 }
-fetch("http://localhost:3000/api/tasks")
+fetch("http://localhost:3000/api/tasks", {
+    headers: {
+        "Authorization": "Bearer " + token
+    }
+})
     .then(function(response) {
         return response.json();
     })
@@ -404,3 +419,10 @@ fetch("http://localhost:3000/api/tasks")
     .catch(function(error) {
         console.log("Backend error:", error);
     });
+   document.getElementById("logoutButton").addEventListener("click", function() {
+
+    localStorage.removeItem("token");
+
+    window.location.href = "login.html";
+
+});
