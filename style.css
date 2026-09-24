@@ -791,3 +791,23 @@ main > p {
     display: block !important;
     text-align: center;
 }
+#logoutButton {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#logoutButton {
+    background: #f1f1f1;
+    color: #333;
+}
+
+#logoutButton:hover {
+    background: #ddd;
+}

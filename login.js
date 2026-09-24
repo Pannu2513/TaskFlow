@@ -23,6 +23,7 @@ document.getElementById("loginPageButton").addEventListener("click", async funct
         if (response.ok) {
 
             localStorage.setItem("token", data.token);
+            localStorage.setItem("userName", data.name);
 
             window.location.href = "index.html";
 

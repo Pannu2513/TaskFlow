@@ -14,6 +14,10 @@ const token = localStorage.getItem("token");
 if (!token) {
     window.location.href = "login.html";
 }
+const userName = localStorage.getItem("userName");
+
+document.getElementById("welcomeMessage").textContent =
+    "Welcome back, " + userName + " 👋";
 
 let tasks = [];
 
