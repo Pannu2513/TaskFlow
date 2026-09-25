@@ -456,3 +456,6 @@ fetch("http://localhost:3000/api/tasks", {
     localStorage.removeItem("userName");
     window.location.href = "login.html";
 });
+document.getElementById("profileButton").addEventListener("click", function() {
+    alert("Profile section coming soon!");
+});
