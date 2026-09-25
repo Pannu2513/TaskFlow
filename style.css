@@ -811,3 +811,12 @@ nav {
 #logoutButton:hover {
     background: #ddd;
 }
+.user-area {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+#userNameDisplay {
+    font-weight: bold;
+}

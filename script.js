@@ -18,6 +18,7 @@ const userName = localStorage.getItem("userName");
 
 document.getElementById("welcomeMessage").textContent =
     "Welcome back, " + userName + " 👋";
+    document.getElementById("userNameDisplay").textContent = userName;
 
 let tasks = [];
 
