@@ -158,8 +158,16 @@ function completeTask(index) {
         })
     })
     .then(function(response) {
-        return response.json();
-    })
+
+    if (response.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        window.location.href = "login.html";
+        return;
+    }
+
+    return response.json();
+})
     .then(function(updatedTask) {
 
         tasks[index] = updatedTask;
@@ -183,27 +191,30 @@ function deleteTask(index) {
 
     const taskId = tasks[index].id;
 
-    fetch("http://localhost:3000/api/tasks/" + taskId, {
-        method: "DELETE",
-         headers: {
+   fetch("http://localhost:3000/api/tasks/" + taskId, {
+    method: "DELETE",
+    headers: {
         "Authorization": "Bearer " + token
     }
-    })
-    .then(function(response) {
-        return response.json();
-    })
-    .then(function(deletedTask) {
+})
+.then(function(response) {
 
-        tasks.splice(index, 1);
+    if (response.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        window.location.href = "login.html";
+        return;
+    }
 
-        displayTasks();
-        updateStats();
+    tasks.splice(index, 1);
 
-    })
-    .catch(function(error) {
-        console.log("Error deleting task:", error);
-    });
+    displayTasks();
+    updateStats();
 
+})
+.catch(function(error) {
+    console.log("Error deleting task:", error);
+});
 }
 function editTask(index) {
 
@@ -234,9 +245,17 @@ function editTask(index) {
             completed: tasks[index].completed
         })
     })
-    .then(function(response) {
-        return response.json();
-    })
+   .then(function(response) {
+
+    if (response.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        window.location.href = "login.html";
+        return;
+    }
+
+    return response.json();
+})
     .then(function(updatedTask) {
 
         tasks[index] = updatedTask;
@@ -413,8 +432,16 @@ fetch("http://localhost:3000/api/tasks", {
     }
 })
     .then(function(response) {
-        return response.json();
-    })
+
+    if (response.status === 401) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("userName");
+        window.location.href = "login.html";
+        return;
+    }
+
+    return response.json();
+})
     .then(function(data) {
         tasks = data;
         displayTasks();
