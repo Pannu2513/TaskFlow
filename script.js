@@ -451,9 +451,7 @@ fetch("http://localhost:3000/api/tasks", {
         console.log("Backend error:", error);
     });
    document.getElementById("logoutButton").addEventListener("click", function() {
-
     localStorage.removeItem("token");
-
+    localStorage.removeItem("userName");
     window.location.href = "login.html";
-
 });
